@@ -188,6 +188,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   symbols: []
+  symbolsActives: []
+  GOActives: []
   idSymbols: 0300000007000000010000000200000005000000050000000600000004000000050000000600000003000000010000000200000007000000
   sprites:
   - {fileID: 21300000, guid: d3ffe63bec1b4d94589b3a6acd57aa3e, type: 3}
@@ -206,10 +208,9 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 4ae2e222de631e4449252d8e473e238d, type: 3}
   uniqueList: {fileID: 406671046}
   radius: 6
-  spritePrefab: {fileID: 6257729641217201138, guid: 13c2d1d3b6107d441bf11f51d86c62ba, type: 3}
+  spritePrefab: {fileID: 6745116838158564852, guid: 6921f712d8622ea44aa97671c7026103, type: 3}
   angleOffset: 0
   speedRoller: 500
-  state: 0
   spinDuration: 0
   startSpinnig: 0
 --- !u!4 &109666541
@@ -399,6 +400,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   symbols: []
+  symbolsActives: []
+  GOActives: []
   idSymbols: 0500000001000000020000000700000004000000060000000300000004000000010000000100000005000000030000000600000006000000
   sprites:
   - {fileID: 21300000, guid: 31322f6481f4e974290e101b8ced65d1, type: 3}
@@ -417,10 +420,9 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 9b38f0bf57ae7cc4f8c261acbbd25c8f, type: 3}
   uniqueList: {fileID: 406671046}
   radius: 6
-  spritePrefab: {fileID: 6257729641217201138, guid: 13c2d1d3b6107d441bf11f51d86c62ba, type: 3}
+  spritePrefab: {fileID: 6745116838158564852, guid: 6921f712d8622ea44aa97671c7026103, type: 3}
   angleOffset: 0
   speedRoller: 500
-  state: 0
   spinDuration: 0
   startSpinnig: 0
 --- !u!1 &433185180
@@ -453,6 +455,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   symbols: []
+  symbolsActives: []
+  GOActives: []
   idSymbols: 060000000400000004000000060000000300000005000000020000000200000001000000070000000700000006000000050000000400000006000000
   sprites:
   - {fileID: 21300000, guid: 9b38f0bf57ae7cc4f8c261acbbd25c8f, type: 3}
@@ -472,10 +476,9 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 9b38f0bf57ae7cc4f8c261acbbd25c8f, type: 3}
   uniqueList: {fileID: 406671046}
   radius: 6.5
-  spritePrefab: {fileID: 6257729641217201138, guid: 13c2d1d3b6107d441bf11f51d86c62ba, type: 3}
+  spritePrefab: {fileID: 6745116838158564852, guid: 6921f712d8622ea44aa97671c7026103, type: 3}
   angleOffset: 0
   speedRoller: 500
-  state: 0
   spinDuration: 0
   startSpinnig: 0
 --- !u!4 &433185182
@@ -940,6 +943,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1100879180}
+  - component: {fileID: 1100879181}
   m_Layer: 0
   m_Name: PatternManager
   m_TagString: Untagged
@@ -962,6 +966,38 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1100879181
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1100879179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e14e59caa4514304fa09c45b7ce07a87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Roller5: []
+  ReelsActives: []
+  reward_text: {fileID: 1416938119}
+  linearPatterns:
+  - values: 000000000300000006000000090000000c000000
+  - values: 0100000004000000070000000a0000000d000000
+  - values: 0200000005000000080000000b0000000e000000
+  wildPatterns:
+  - values: 0000000004000000080000000a0000000c000000
+  - values: 0200000004000000060000000a0000000e000000
+  - values: 020000000300000008000000090000000e000000
+  - values: 0000000005000000060000000b0000000c000000
+  - values: 0000000003000000070000000b0000000e000000
+  - values: 020000000500000007000000090000000c000000
+  - values: 0000000004000000080000000a000000
+  - values: 0200000004000000060000000a000000
+  - values: 000000000400000006000000
+  - values: 020000000400000008000000
+  - values: 010000000300000007000000
+  - values: 010000000500000007000000
 --- !u!1 &1347986209
 GameObject:
   m_ObjectHideFlags: 0
@@ -992,6 +1028,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   symbols: []
+  symbolsActives: []
+  GOActives: []
   idSymbols: 020000000700000001000000040000000700000003000000050000000600000006000000060000000700000006000000040000000600000007000000
   sprites:
   - {fileID: 21300000, guid: abde2d6ccd4ed6e46b4f929af1f07c9e, type: 3}
@@ -1012,10 +1050,9 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 4ae2e222de631e4449252d8e473e238d, type: 3}
   uniqueList: {fileID: 406671046}
   radius: 6.5
-  spritePrefab: {fileID: 6257729641217201138, guid: 13c2d1d3b6107d441bf11f51d86c62ba, type: 3}
+  spritePrefab: {fileID: 6745116838158564852, guid: 6921f712d8622ea44aa97671c7026103, type: 3}
   angleOffset: 0
   speedRoller: 500
-  state: 0
   spinDuration: 0
   startSpinnig: 0
 --- !u!4 &1347986211
@@ -1063,6 +1100,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   symbols: []
+  symbolsActives: []
+  GOActives: []
   idSymbols: 03000000020000000400000003000000010000000600000007000000010000000600000006000000050000000500000003000000
   sprites:
   - {fileID: 21300000, guid: d3ffe63bec1b4d94589b3a6acd57aa3e, type: 3}
@@ -1080,10 +1119,9 @@ MonoBehaviour:
   - {fileID: 21300000, guid: d3ffe63bec1b4d94589b3a6acd57aa3e, type: 3}
   uniqueList: {fileID: 406671046}
   radius: 5.5
-  spritePrefab: {fileID: 6257729641217201138, guid: 13c2d1d3b6107d441bf11f51d86c62ba, type: 3}
+  spritePrefab: {fileID: 6745116838158564852, guid: 6921f712d8622ea44aa97671c7026103, type: 3}
   angleOffset: 0
   speedRoller: 500
-  state: 0
   spinDuration: 0
   startSpinnig: 0
 --- !u!4 &1365085678
@@ -1175,6 +1213,140 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1366252202}
+  m_CullTransparentMesh: 1
+--- !u!1 &1416938117
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1416938118}
+  - component: {fileID: 1416938120}
+  - component: {fileID: 1416938119}
+  m_Layer: 5
+  m_Name: Text (TMP)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1416938118
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1416938117}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 2.4967, y: 2.4967, z: 2.4967}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1438059235}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -672, y: -461}
+  m_SizeDelta: {x: 200, y: 50}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1416938119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1416938117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: 
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 20
+  m_fontSizeBase: 20
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 1
+  m_VerticalAlignment: 256
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_enableWordWrapping: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 1
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: -9.466297, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &1416938120
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1416938117}
   m_CullTransparentMesh: 1
 --- !u!1 &1438059231
 GameObject:
@@ -1273,6 +1445,7 @@ RectTransform:
   m_Children:
   - {fileID: 2024586092}
   - {fileID: 1031576285}
+  - {fileID: 1416938118}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1293,7 +1466,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myButton: {fileID: 1031576286}
-  rewardText: {fileID: 0}
+  rewardText: {fileID: 1416938119}
 --- !u!1 &1636785023
 GameObject:
   m_ObjectHideFlags: 0
@@ -1330,9 +1503,13 @@ MonoBehaviour:
   - {fileID: 433185181}
   - {fileID: 109666540}
   delayBetweenReels: 0.5
-  speedRoller: 0
+  speedRoller: 350
   enableButton: {fileID: 1438059236}
   state: 0
+  symbolsActivesSpin: []
+  GOActivesSpin: []
+  patternManager: {fileID: 1100879181}
+  useRandomSpeed: 0
 --- !u!4 &1636785025
 Transform:
   m_ObjectHideFlags: 0
@@ -1395,5 +1572,5 @@ SceneRoots:
   - {fileID: 108375573}
   - {fileID: 1636785025}
   - {fileID: 406671045}
-  - {fileID: 127483668}
   - {fileID: 1100879180}
+  - {fileID: 127483668}

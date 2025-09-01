@@ -22,6 +22,14 @@ public class SpinManager : MonoBehaviour
     public EnableButton enableButton;
 
     public SlotState state = SlotState.Idle;
+
+    public List<Symbols> symbolsActivesSpin = new List<Symbols>();
+    public List<GameObject> GOActivesSpin = new List<GameObject>();
+
+    public PatternManager patternManager;
+
+    private bool evaluated = false;
+    public bool useRandomSpeed = false;
     void Start()
     {
         state = SlotState.Starting;
@@ -48,7 +56,7 @@ public class SpinManager : MonoBehaviour
                 timer = 0f;                 // reseteamos delay
                 currentIndexToStop = 0;     // reiniciamos índice de parada
                 state = SlotState.Stopping;
-                Debug.Log("Estoy entrando a stopping");
+               
             }
         }
 
@@ -106,7 +114,7 @@ public class SpinManager : MonoBehaviour
                 stoppingSequence = false; //fin de la fase
                 currentIndexToStop = 0;
                 timer = 0f;
-                state = SlotState.Evaluating;
+                state = SlotState.FillingList;
                 enableButton.OnSpinFinish();
             }
         }
@@ -114,13 +122,18 @@ public class SpinManager : MonoBehaviour
 
     public void ButtonSpin()
     {
-        speedRoller = Random.Range(350, 500);
+        if (useRandomSpeed)
+        {
+         speedRoller = Random.Range(350, 500);
+        }
         spinningSequence = true;
         stoppingSequence = false;
         durationSequence = false;
 
         currentIndex = 0;
         currentIndexToStop = 0;
+
+        evaluated = false;
 
         timer = 0f;
         timer2 = 0f;
@@ -139,6 +152,10 @@ public class SpinManager : MonoBehaviour
                 state = SlotState.Idle;
                 break;
             case SlotState.Idle:
+                foreach(var reel in listReels)
+                {
+                    reel.IdleState();
+                }
                 break;
 
             case SlotState.Spinning:
@@ -151,8 +168,35 @@ public class SpinManager : MonoBehaviour
                 StopTheWheel();
                 break;
 
+            case SlotState.FillingList:
+                if (!evaluated)
+                {
+                    GOActivesSpin.Clear();
+                    symbolsActivesSpin.Clear();
+
+                    foreach (var reel in listReels)
+                    {
+                        GOActivesSpin.AddRange(reel.GOActivein());
+                        symbolsActivesSpin.AddRange(reel.SymbolsActives());
+                    }
+
+                    evaluated = true; // marca que ya se hizo la evaluación
+                                      // aquí podrías llamar un método para procesar el resultado
+                    state = SlotState.Evaluating;
+                }
+                break;
             case SlotState.Evaluating:
-                // Aquí iría la lógica para evaluar patrones
+                if (patternManager != null)
+                {
+                    patternManager.Roller5.Clear();   // opcional, limpia la lista antes de llenar
+                    patternManager.ReelsActives.Clear();
+
+                    patternManager.FillListRollers(symbolsActivesSpin);
+                    patternManager.FillReels(GOActivesSpin);
+
+                    // llamamos a la evaluación de patrones
+                    patternManager.CheckPatterns();
+                }
                 break;
         }
     }

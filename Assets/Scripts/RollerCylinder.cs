@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public enum SlotState { Idle, Starting, Spinning, Stopping, Evaluating, ShowingWin }
+public enum SlotState { Idle, Starting, Spinning, Stopping, FillingList ,Evaluating, ShowingWin }
 public class RollerCylinder : MonoBehaviour
 {
     [Header("Sprites del rodillo")]
     public List<Symbols> symbols = new List<Symbols>();
     public List<Symbols> symbolsActives = new List<Symbols>();
+    public List<GameObject> GOActives = new List<GameObject>();
     public int[] idSymbols;
     public Sprite[] sprites;
     public UniqueList uniqueList;
@@ -28,7 +29,7 @@ public class RollerCylinder : MonoBehaviour
 
     public bool startSpinnig = false;
 
-
+    
     void GetSymbolsToFill()
     {
         foreach(var i in idSymbols)
@@ -123,20 +124,22 @@ public class RollerCylinder : MonoBehaviour
     {
         GetSymbolsToFill();
         GenerateCylinder();
-    } 
+       
+    }
     public void IdleState()
     {
-        GetSymbolsToFill();
-        GenerateCylinder();
+        bool activeWin = true;
+
+        //
     }
     public void SpinningState()
     {
+        TurnOffChilds();
        startSpinnig = true;
     }
     public void StoppingState()
     {
         StopAtNearestSprite();
-        Debug.Log("Rodillo detenido y alineado");
     }
     // Alinea el rodillo al sprite más cercano
     private void StopAtNearestSprite()
@@ -145,5 +148,78 @@ public class RollerCylinder : MonoBehaviour
         float currentX = transform.eulerAngles.x;
         float targetX = Mathf.Round(currentX / angleStep) * angleStep;
         transform.rotation = Quaternion.Euler(targetX, 0f, 0f);
+    }
+
+    public List<GameObject> GOActivein()
+    {
+        GOActives.Clear();
+
+        Camera cam = Camera.main;
+        if (cam == null) return GOActives;
+
+        // Ordena los hijos activos según la distancia a la cámara
+        Transform[] activeChildren = new Transform[transform.childCount];
+        int count = 0;
+        foreach (Transform child in transform)
+        {
+            if (child.gameObject.activeInHierarchy)
+                activeChildren[count++] = child;
+        }
+        System.Array.Resize(ref activeChildren, count);
+
+        System.Array.Sort(activeChildren, (a, b) =>
+        {
+            // proyecta las posiciones al viewport de la cámara
+            Vector3 aView = cam.WorldToViewportPoint(a.position);
+            Vector3 bView = cam.WorldToViewportPoint(b.position);
+
+            // compara por Y en pantalla: Y más alto = más arriba visualmente
+            return bView.y.CompareTo(aView.y);
+        });
+
+        GOActives.AddRange(System.Array.ConvertAll(activeChildren, t => t.gameObject));
+        return GOActives;
+    }
+
+    public List<Symbols> SymbolsActives()
+    {
+        symbolsActives.Clear();
+
+        Camera cam = Camera.main;
+        if (cam == null) return symbolsActives;
+
+        // Ordena los hijos activos según la distancia a la cámara
+        Transform[] activeChildren = new Transform[transform.childCount];
+        int count = 0;
+        foreach (Transform child in transform)
+        {
+            if (child.gameObject.activeInHierarchy)
+                activeChildren[count++] = child;
+        }
+        System.Array.Resize(ref activeChildren, count);
+
+        System.Array.Sort(activeChildren, (a, b) =>
+        {
+            Vector3 aView = cam.WorldToViewportPoint(a.position);
+            Vector3 bView = cam.WorldToViewportPoint(b.position);
+            return bView.y.CompareTo(aView.y); // de arriba hacia abajo
+        });
+
+        foreach (var child in activeChildren)
+        {
+            Symbols symbol = symbols.Find(s => s.name == child.name);
+            if (symbol != null)
+                symbolsActives.Add(symbol);
+        }
+
+        return symbolsActives;
+    }
+
+    public void TurnOffChilds()
+    {
+        foreach (Transform child in transform)
+        {
+           child.GetChild(0).gameObject.SetActive(false);
+        }
     }
 }
