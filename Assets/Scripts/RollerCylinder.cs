@@ -2,224 +2,346 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
+/// <summary>
+/// Represents the possible states of a slot roller.
+/// </summary>
 public enum SlotState { Idle, Starting, Spinning, Stopping, FillingList ,Evaluating, ShowingWin }
+/// <summary>
+/// Controls the behavior and mechanics of a roller cylinder in the slot machine.
+/// </summary>
 public class RollerCylinder : MonoBehaviour
 {
-    [Header("Sprites del rodillo")]
+    [Header("Roller Sprites")]
+    [Tooltip("List of symbols available to fill the roller.")]
     public List<Symbols> symbols = new List<Symbols>();
+
+    [Tooltip("List of currently active symbols on the roller.")]
     public List<Symbols> symbolsActives = new List<Symbols>();
+
+    [Tooltip("List of currently active GameObjects on the roller.")]
     public List<GameObject> GOActives = new List<GameObject>();
+
+    [Tooltip("Array of symbol IDs used to fill the roller.")]
     public int[] idSymbols;
+
+    [Tooltip("Sprites available to represent symbols.")]
     public Sprite[] sprites;
+
+    [Tooltip("Reference to the unique symbol list.")]
     public UniqueList uniqueList;
 
-    [Header("Parámetros del rodillo")]
+    [Header("Roller Parameters")]
+    [Tooltip("Radius of the roller cylinder.")]
     public float radius = 3f;
+
+    [Tooltip("Prefab of the sprite to be instantiated on the roller.")]
     public GameObject spritePrefab;
+
+    [Tooltip("Initial angle offset of the roller.")]
     public float angleOffset = 0f;
-    public float speedRoller = 100f; // velocidad de rotación
+
+    [Tooltip("Rotation speed of the roller.")]
+    public float speedRoller = 100f;
 
     private int spriteCount;
-    
-
-   
-    public float spinDuration = 0f;
     private float angleStep;
 
+    [Tooltip("Duration of the roller spin in seconds.")]
+    public float spinDuration = 0f;
+
+    [Tooltip("Indicates if the roller is currently spinning.")]
     public bool startSpinnig = false;
 
-    
+
+    /// <summary>
+    /// Fills the roller symbol list based on defined symbol IDs.
+    /// </summary>
     void GetSymbolsToFill()
     {
-        foreach(var i in idSymbols)
+        try
         {
-            symbols.Add(uniqueList.symbols[i-1]);
+            foreach (var i in idSymbols)
+            {
+                symbols.Add(uniqueList.symbols[i - 1]);
+            }
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"Error in GetSymbolsToFill: {ex.Message}");
         }
     }
+
+    /// <summary>
+    /// Generates the visual cylinder with the configured symbols.
+    /// </summary>
     void GenerateCylinder()
     {
-        if (symbols == null || symbols.Count == 0) return;
-
-        spriteCount = symbols.Count;
-        angleStep = 360f / spriteCount;
-        int iter = 0;
-        for (int i = 0; i < spriteCount; i++)
+        try
         {
-            iter++;
-            if(iter == spriteCount)
-                iter = 0;
-            float angle = (-i * angleStep + angleOffset) * Mathf.Deg2Rad;
+            if (symbols == null || symbols.Count == 0) return;
 
-            Vector3 pos = new Vector3(
-                0f,
-                Mathf.Sin(angle) * radius ,   // eje vertical
-                Mathf.Cos(angle) * radius    // profundidad
-            );
+            spriteCount = symbols.Count;
+            angleStep = 360f / spriteCount;
+            int iter = 0;
 
-            GameObject go = Instantiate(spritePrefab, transform);
-            go.transform.localPosition = pos;
-            go.name = symbols[iter].name;
+            for (int i = 0; i < spriteCount; i++)
+            {
+                iter++;
+                if (iter == spriteCount)
+                    iter = 0;
 
-            SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
-            if (sr != null)
-                sr.sprite = symbols[iter].Sprite;
+                float angle = (-i * angleStep + angleOffset) * Mathf.Deg2Rad;
+
+                Vector3 pos = new Vector3(
+                    0f,
+                    Mathf.Sin(angle) * radius,
+                    Mathf.Cos(angle) * radius
+                );
+
+                GameObject go = Instantiate(spritePrefab, transform);
+                go.transform.localPosition = pos;
+                go.name = symbols[iter].name;
+
+                SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
+                if (sr != null)
+                    sr.sprite = symbols[iter].Sprite;
+            }
         }
-       // transform.rotation = Quaternion.Euler(angleStep, 0f, 0f);
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"Error in GenerateCylinder: {ex.Message}");
+        }
     }
-
-    // Hace girar el rodillo
+    /// <summary>
+    /// Rotates the roller along the X-axis.
+    /// </summary>
     public void Spin(float speed)
     {
-        transform.Rotate(Vector3.right * speed * Time.deltaTime);
+        try
+        {
+            transform.Rotate(Vector3.right * speed * Time.deltaTime);
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"Error in Spin: {ex.Message}");
+        }
     }
 
     void Update()
     {
-        // Mantener sprites derechitos
-        foreach (Transform child in transform)
+        try
         {
-            child.rotation = Quaternion.identity;
-        }
+            foreach (Transform child in transform)
+            {
+                child.rotation = Quaternion.identity;
+            }
 
-        // Activar solo los 3 sprites más cercanos a la cámara
-        UpdateVisibleSprites();
-        if (startSpinnig)
+            UpdateVisibleSprites();
+
+            if (startSpinnig)
+            {
+                Spin(speedRoller);
+            }
+        }
+        catch (System.Exception ex)
         {
-            Spin(speedRoller);
+            Debug.LogError($"Error in Update: {ex.Message}");
         }
-
-        //SwitchSlot();
     }
 
+
+    /// <summary>
+    /// Updates which sprites are visible in the main camera.
+    /// </summary>
     private void UpdateVisibleSprites()
     {
-        Camera cam = Camera.main;
-        if (cam == null) return;
-
-        // Ordena los hijos según la distancia al frente de la cámara
-        Transform[] children = new Transform[transform.childCount];
-        for (int i = 0; i < transform.childCount; i++)
-            children[i] = transform.GetChild(i);
-
-        // Compara la posición en Z en cámara
-        System.Array.Sort(children, (a, b) =>
+        try
         {
-            float az = cam.WorldToViewportPoint(a.position).z;
-            float bz = cam.WorldToViewportPoint(b.position).z;
-            return bz.CompareTo(az); // de mayor a menor
-        });
+            Camera cam = Camera.main;
+            if (cam == null) return;
 
-        // Desactiva todos primero
-        foreach (Transform child in transform)
-            child.gameObject.SetActive(false);
+            Transform[] children = new Transform[transform.childCount];
+            for (int i = 0; i < transform.childCount; i++)
+                children[i] = transform.GetChild(i);
 
-        // Activa solo los 3 más cercanos al frente de la cámara
-        for (int i = 0; i < Mathf.Min(3, children.Length); i++)
-            children[i].gameObject.SetActive(true);
+            System.Array.Sort(children, (a, b) =>
+            {
+                float az = cam.WorldToViewportPoint(a.position).z;
+                float bz = cam.WorldToViewportPoint(b.position).z;
+                return bz.CompareTo(az);
+            });
+
+            foreach (Transform child in transform)
+                child.gameObject.SetActive(false);
+
+            for (int i = 0; i < Mathf.Min(3, children.Length); i++)
+                children[i].gameObject.SetActive(true);
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"Error in UpdateVisibleSprites: {ex.Message}");
+        }
     }
-   
 
+
+    /// <summary>
+    /// Initializes the roller by filling and generating symbols.
+    /// </summary>
     public void StartState()
     {
-        GetSymbolsToFill();
-        GenerateCylinder();
-       
+        try
+        {
+            GetSymbolsToFill();
+            GenerateCylinder();
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"Error in StartState: {ex.Message}");
+        }
     }
-    public void IdleState()
-    {
-        bool activeWin = true;
+  
 
-        //
-    }
+    /// <summary>
+    /// Starts spinning the roller.
+    /// </summary>
     public void SpinningState()
     {
-        TurnOffChilds();
-       startSpinnig = true;
+        try
+        {
+            TurnOffChilds();
+            startSpinnig = true;
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"Error in SpinningState: {ex.Message}");
+        }
     }
+
+    /// <summary>
+    /// Stops the roller at the nearest aligned symbol.
+    /// </summary>
     public void StoppingState()
     {
-        StopAtNearestSprite();
+        try
+        {
+            StopAtNearestSprite();
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"Error in StoppingState: {ex.Message}");
+        }
     }
-    // Alinea el rodillo al sprite más cercano
+
+    /// <summary>
+    /// Aligns the roller to the nearest symbol on stop.
+    /// </summary>
     private void StopAtNearestSprite()
     {
-        startSpinnig = false;
-        float currentX = transform.eulerAngles.x;
-        float targetX = Mathf.Round(currentX / angleStep) * angleStep;
-        transform.rotation = Quaternion.Euler(targetX, 0f, 0f);
+        try
+        {
+            startSpinnig = false;
+            float currentX = transform.eulerAngles.x;
+            float targetX = Mathf.Round(currentX / angleStep) * angleStep;
+            transform.rotation = Quaternion.Euler(targetX, 0f, 0f);
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"Error in StopAtNearestSprite: {ex.Message}");
+        }
     }
 
+    /// <summary>
+    /// Returns a list of active GameObjects currently visible on the roller.
+    /// </summary>
     public List<GameObject> GOActivein()
     {
-        GOActives.Clear();
-
-        Camera cam = Camera.main;
-        if (cam == null) return GOActives;
-
-        // Ordena los hijos activos según la distancia a la cámara
-        Transform[] activeChildren = new Transform[transform.childCount];
-        int count = 0;
-        foreach (Transform child in transform)
+        try
         {
-            if (child.gameObject.activeInHierarchy)
-                activeChildren[count++] = child;
+            GOActives.Clear();
+            Camera cam = Camera.main;
+            if (cam == null) return GOActives;
+
+            Transform[] activeChildren = new Transform[transform.childCount];
+            int count = 0;
+            foreach (Transform child in transform)
+            {
+                if (child.gameObject.activeInHierarchy)
+                    activeChildren[count++] = child;
+            }
+            System.Array.Resize(ref activeChildren, count);
+
+            System.Array.Sort(activeChildren, (a, b) =>
+            {
+                Vector3 aView = cam.WorldToViewportPoint(a.position);
+                Vector3 bView = cam.WorldToViewportPoint(b.position);
+                return bView.y.CompareTo(aView.y);
+            });
+
+            GOActives.AddRange(System.Array.ConvertAll(activeChildren, t => t.gameObject));
         }
-        System.Array.Resize(ref activeChildren, count);
-
-        System.Array.Sort(activeChildren, (a, b) =>
+        catch (System.Exception ex)
         {
-            // proyecta las posiciones al viewport de la cámara
-            Vector3 aView = cam.WorldToViewportPoint(a.position);
-            Vector3 bView = cam.WorldToViewportPoint(b.position);
-
-            // compara por Y en pantalla: Y más alto = más arriba visualmente
-            return bView.y.CompareTo(aView.y);
-        });
-
-        GOActives.AddRange(System.Array.ConvertAll(activeChildren, t => t.gameObject));
+            Debug.LogError($"Error in GOActivein: {ex.Message}");
+        }
         return GOActives;
     }
 
+    /// <summary>
+    /// Returns a list of active symbols currently visible on the roller.
+    /// </summary>
     public List<Symbols> SymbolsActives()
     {
-        symbolsActives.Clear();
-
-        Camera cam = Camera.main;
-        if (cam == null) return symbolsActives;
-
-        // Ordena los hijos activos según la distancia a la cámara
-        Transform[] activeChildren = new Transform[transform.childCount];
-        int count = 0;
-        foreach (Transform child in transform)
+        try
         {
-            if (child.gameObject.activeInHierarchy)
-                activeChildren[count++] = child;
+            symbolsActives.Clear();
+            Camera cam = Camera.main;
+            if (cam == null) return symbolsActives;
+
+            Transform[] activeChildren = new Transform[transform.childCount];
+            int count = 0;
+            foreach (Transform child in transform)
+            {
+                if (child.gameObject.activeInHierarchy)
+                    activeChildren[count++] = child;
+            }
+            System.Array.Resize(ref activeChildren, count);
+
+            System.Array.Sort(activeChildren, (a, b) =>
+            {
+                Vector3 aView = cam.WorldToViewportPoint(a.position);
+                Vector3 bView = cam.WorldToViewportPoint(b.position);
+                return bView.y.CompareTo(aView.y);
+            });
+
+            foreach (var child in activeChildren)
+            {
+                Symbols symbol = symbols.Find(s => s.name == child.name);
+                if (symbol != null)
+                    symbolsActives.Add(symbol);
+            }
         }
-        System.Array.Resize(ref activeChildren, count);
-
-        System.Array.Sort(activeChildren, (a, b) =>
+        catch (System.Exception ex)
         {
-            Vector3 aView = cam.WorldToViewportPoint(a.position);
-            Vector3 bView = cam.WorldToViewportPoint(b.position);
-            return bView.y.CompareTo(aView.y); // de arriba hacia abajo
-        });
-
-        foreach (var child in activeChildren)
-        {
-            Symbols symbol = symbols.Find(s => s.name == child.name);
-            if (symbol != null)
-                symbolsActives.Add(symbol);
+            Debug.LogError($"Error in SymbolsActives: {ex.Message}");
         }
-
         return symbolsActives;
     }
 
+    /// <summary>
+    /// Turns off child objects inside the roller.
+    /// </summary>
     public void TurnOffChilds()
     {
-        foreach (Transform child in transform)
+        try
         {
-           child.GetChild(0).gameObject.SetActive(false);
+            foreach (Transform child in transform)
+            {
+                child.GetChild(0).gameObject.SetActive(false);
+            }
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"Error in TurnOffChilds: {ex.Message}");
         }
     }
 }

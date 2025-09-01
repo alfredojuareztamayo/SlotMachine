@@ -2,202 +2,268 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/// <summary>
+/// Manages the spinning sequence, timing, and evaluation of multiple roller cylinders.
+/// </summary>
 public class SpinManager : MonoBehaviour
 {
+    [Header("Reels Configuration")]
+    [Tooltip("List of roller cylinders controlled by this manager.")]
     public List<RollerCylinder> listReels = new List<RollerCylinder>();
-    public float delayBetweenReels = 0.5f; // tiempo entre rodillos
+
+    [Tooltip("Delay time in seconds between each reel spin start.")]
+    public float delayBetweenReels = 0.5f;
+
+    [Header("Spin Settings")]
+    [Tooltip("Base spinning speed of the reels.")]
+    public float speedRoller;
+
+    [Tooltip("Enable random spinning speed for each spin.")]
+    public bool useRandomSpeed = false;
+
+    [Header("UI Components")]
+    [Tooltip("Reference to the spin button enabler.")]
+    public EnableButton enableButton;
+
+    [Header("Pattern Manager")]
+    [Tooltip("Manages symbol patterns evaluation after the spin.")]
+    public PatternManager patternManager;
+
+    [Header("Current State")]
+    [Tooltip("Current state of the slot machine.")]
+    public SlotState state = SlotState.Idle;
+
+    [Tooltip("List of symbols active after a spin.")]
+    public List<Symbols> symbolsActivesSpin = new List<Symbols>();
+
+    [Tooltip("List of GameObjects active after a spin.")]
+    public List<GameObject> GOActivesSpin = new List<GameObject>();
 
     private int currentIndex = 0;
     private int currentIndexToStop = 0;
 
     private float timer = 0f;
-    private float timer2 = 0f;      // contador para esperar la duración
-    private float timerToStop = 0f; // duración aleatoria antes de empezar a detener
+    private float timer2 = 0f;
+    private float timerToStop = 0f;
 
     private bool spinningSequence = false;
     private bool stoppingSequence = false;
-    private bool durationSequence = false; // fase de duración
-    public float speedRoller;
-
-    public EnableButton enableButton;
-
-    public SlotState state = SlotState.Idle;
-
-    public List<Symbols> symbolsActivesSpin = new List<Symbols>();
-    public List<GameObject> GOActivesSpin = new List<GameObject>();
-
-    public PatternManager patternManager;
-
+    private bool durationSequence = false;
     private bool evaluated = false;
-    public bool useRandomSpeed = false;
+
+    /// <summary>
+    /// Initializes the slot machine state at start.
+    /// </summary>
     void Start()
     {
-        state = SlotState.Starting;
-        SwitchSlot();
+        try
+        {
+            state = SlotState.Starting;
+            SwitchSlot();
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"Error in Start: {ex.Message}");
+        }
     }
+
+    /// <summary>
+    /// Updates slot machine logic and state machine each frame.
+    /// </summary>
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.W))
-            ButtonSpin();
-
-        SwitchSlot();
-        //SpinTheWheel();
-
-        if (durationSequence)
+        try
         {
-            timer2 += Time.deltaTime;
+            if (Input.GetKeyDown(KeyCode.W))
+                ButtonSpin();
 
-            // cuando el tiempo acumulado supera el tiempo asignado empezamos a detener
-            if (timer2 >= timerToStop)
+            SwitchSlot();
+
+            if (durationSequence)
             {
-                durationSequence = false;   // apagamos la espera
-                stoppingSequence = true;    // encendemos la fase de detener
-                timer2 = 0f;                // reseteamos contador
-                timer = 0f;                 // reseteamos delay
-                currentIndexToStop = 0;     // reiniciamos índice de parada
-                state = SlotState.Stopping;
-               
+                timer2 += Time.deltaTime;
+
+                if (timer2 >= timerToStop)
+                {
+                    durationSequence = false;
+                    stoppingSequence = true;
+                    timer2 = 0f;
+                    timer = 0f;
+                    currentIndexToStop = 0;
+                    state = SlotState.Stopping;
+                }
             }
         }
-
-        //StopTheWheel(); //ahora también se evalúa en Update
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"Error in Update: {ex.Message}");
+        }
     }
 
+    /// <summary>
+    /// Spins each reel sequentially with a delay between them.
+    /// </summary>
     private void SpinTheWheel()
     {
-       
-        if (spinningSequence)
+        try
         {
-            timer += Time.deltaTime;
-
-            if (timer >= delayBetweenReels && currentIndex < listReels.Count)
+            if (spinningSequence)
             {
-               
-                listReels[currentIndex].spinDuration = Random.Range(2f, 5f);
-                listReels[currentIndex].speedRoller = speedRoller;
-                listReels[currentIndex].SpinningState();
+                timer += Time.deltaTime;
 
-                currentIndex++;
-                timer = 0f;
+                if (timer >= delayBetweenReels && currentIndex < listReels.Count)
+                {
+                    listReels[currentIndex].spinDuration = Random.Range(2f, 5f);
+                    listReels[currentIndex].speedRoller = speedRoller;
+                    listReels[currentIndex].SpinningState();
+
+                    currentIndex++;
+                    timer = 0f;
+                }
+
+                if (currentIndex >= listReels.Count)
+                {
+                    spinningSequence = false;
+                    timerToStop = Random.Range(2f, 4f);
+                    durationSequence = true;
+
+                    currentIndex = 0;
+                    timer = 0f;
+                }
             }
-
-            if (currentIndex >= listReels.Count)
-            {
-                spinningSequence = false;
-
-                //generamos duración global antes de detener
-                timerToStop = Random.Range(2f, 4f);
-                durationSequence = true; //ahora entra en fase de duración
-
-                currentIndex = 0;
-                timer = 0f;
-            }
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"Error in SpinTheWheel: {ex.Message}");
         }
     }
 
+    /// <summary>
+    /// Stops each reel sequentially with a delay between them.
+    /// </summary>
     private void StopTheWheel()
     {
-        if (stoppingSequence)
+        try
         {
-            timer += Time.deltaTime;
-
-            if (timer >= delayBetweenReels && currentIndexToStop < listReels.Count)
+            if (stoppingSequence)
             {
-                listReels[currentIndexToStop].StoppingState();
+                timer += Time.deltaTime;
 
-                currentIndexToStop++;
-                timer = 0f;
-            }
+                if (timer >= delayBetweenReels && currentIndexToStop < listReels.Count)
+                {
+                    listReels[currentIndexToStop].StoppingState();
 
-            if (currentIndexToStop >= listReels.Count)
-            {
-                stoppingSequence = false; //fin de la fase
-                currentIndexToStop = 0;
-                timer = 0f;
-                state = SlotState.FillingList;
-                enableButton.OnSpinFinish();
+                    currentIndexToStop++;
+                    timer = 0f;
+                }
+
+                if (currentIndexToStop >= listReels.Count)
+                {
+                    stoppingSequence = false;
+                    currentIndexToStop = 0;
+                    timer = 0f;
+                    state = SlotState.FillingList;
+                    enableButton.OnSpinFinish();
+                }
             }
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"Error in StopTheWheel: {ex.Message}");
         }
     }
 
+    /// <summary>
+    /// Handles spin button press, starts the spin sequence.
+    /// </summary>
     public void ButtonSpin()
     {
-        if (useRandomSpeed)
+        try
         {
-         speedRoller = Random.Range(350, 500);
+            if (useRandomSpeed)
+            {
+                speedRoller = Random.Range(350, 500);
+            }
+            spinningSequence = true;
+            stoppingSequence = false;
+            durationSequence = false;
+
+            currentIndex = 0;
+            currentIndexToStop = 0;
+            evaluated = false;
+            timer = 0f;
+            timer2 = 0f;
+
+            state = SlotState.Spinning;
         }
-        spinningSequence = true;
-        stoppingSequence = false;
-        durationSequence = false;
-
-        currentIndex = 0;
-        currentIndexToStop = 0;
-
-        evaluated = false;
-
-        timer = 0f;
-        timer2 = 0f;
-        state = SlotState.Spinning;
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"Error in ButtonSpin: {ex.Message}");
+        }
     }
 
+    /// <summary>
+    /// Controls the slot state machine and transitions between states.
+    /// </summary>
     private void SwitchSlot()
     {
-        switch (state)
+        try
         {
-            case SlotState.Starting:
-                foreach(var reel in listReels)
-                {
-                    reel.StartState();
-                }
-                state = SlotState.Idle;
-                break;
-            case SlotState.Idle:
-                foreach(var reel in listReels)
-                {
-                    reel.IdleState();
-                }
-                break;
-
-            case SlotState.Spinning:
-
-                SpinTheWheel();
-
-                break;
-
-            case SlotState.Stopping:
-                StopTheWheel();
-                break;
-
-            case SlotState.FillingList:
-                if (!evaluated)
-                {
-                    GOActivesSpin.Clear();
-                    symbolsActivesSpin.Clear();
-
+            switch (state)
+            {
+                case SlotState.Starting:
                     foreach (var reel in listReels)
+                        reel.StartState();
+                    state = SlotState.Idle;
+                    break;
+
+                case SlotState.Idle:
+                   
+                    break;
+
+                case SlotState.Spinning:
+                    SpinTheWheel();
+                    break;
+
+                case SlotState.Stopping:
+                    StopTheWheel();
+                    break;
+
+                case SlotState.FillingList:
+                    if (!evaluated)
                     {
-                        GOActivesSpin.AddRange(reel.GOActivein());
-                        symbolsActivesSpin.AddRange(reel.SymbolsActives());
+                        GOActivesSpin.Clear();
+                        symbolsActivesSpin.Clear();
+
+                        foreach (var reel in listReels)
+                        {
+                            GOActivesSpin.AddRange(reel.GOActivein());
+                            symbolsActivesSpin.AddRange(reel.SymbolsActives());
+                        }
+
+                        evaluated = true;
+                        state = SlotState.Evaluating;
                     }
+                    break;
 
-                    evaluated = true; // marca que ya se hizo la evaluación
-                                      // aquí podrías llamar un método para procesar el resultado
-                    state = SlotState.Evaluating;
-                }
-                break;
-            case SlotState.Evaluating:
-                if (patternManager != null)
-                {
-                    patternManager.Roller5.Clear();   // opcional, limpia la lista antes de llenar
-                    patternManager.ReelsActives.Clear();
+                case SlotState.Evaluating:
+                    if (patternManager != null)
+                    {
+                        patternManager.Roller5.Clear();
+                        patternManager.ReelsActives.Clear();
 
-                    patternManager.FillListRollers(symbolsActivesSpin);
-                    patternManager.FillReels(GOActivesSpin);
+                        patternManager.FillListRollers(symbolsActivesSpin);
+                        patternManager.FillReels(GOActivesSpin);
 
-                    // llamamos a la evaluación de patrones
-                    patternManager.CheckPatterns();
-                }
-                break;
+                        patternManager.CheckPatterns();
+                    }
+                    break;
+            }
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"Error in SwitchSlot: {ex.Message}");
         }
     }
 }

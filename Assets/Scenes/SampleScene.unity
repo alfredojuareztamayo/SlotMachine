@@ -222,7 +222,7 @@ Transform:
   m_GameObject: {fileID: 109666539}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.868321, y: -6.1062355, z: 0.11520312}
+  m_LocalPosition: {x: 6.61, y: -5.8, z: 0.11520312}
   m_LocalScale: {x: 1.0214573, y: 1.0214573, z: 1.0214573}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -381,7 +381,7 @@ Transform:
   m_GameObject: {fileID: 416149819}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -7.211679, y: -6.2062354, z: 0.11520312}
+  m_LocalPosition: {x: -8.03, y: -5.72, z: 0.11520312}
   m_LocalScale: {x: 1.0214573, y: 1.0214573, z: 1.0214573}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -490,7 +490,7 @@ Transform:
   m_GameObject: {fileID: 433185180}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.808321, y: -6.1062355, z: 0.11520312}
+  m_LocalPosition: {x: 2.99, y: -5.81, z: 0.11520312}
   m_LocalScale: {x: 1.0214573, y: 1.0214573, z: 1.0214573}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -602,7 +602,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 5.5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1063,8 +1063,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1347986209}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.091679, y: -6.1062355, z: 0.11520312}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.31, y: -5.68, z: 0.11520312}
   m_LocalScale: {x: 1.0214573, y: 1.0214573, z: 1.0214573}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1118,7 +1118,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 31322f6481f4e974290e101b8ced65d1, type: 3}
   - {fileID: 21300000, guid: d3ffe63bec1b4d94589b3a6acd57aa3e, type: 3}
   uniqueList: {fileID: 406671046}
-  radius: 5.5
+  radius: 6
   spritePrefab: {fileID: 6745116838158564852, guid: 6921f712d8622ea44aa97671c7026103, type: 3}
   angleOffset: 0
   speedRoller: 500
@@ -1132,8 +1132,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1365085676}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.64167905, y: -6.1062355, z: 0.11520312}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.64167905, y: -5.66, z: 0.11520312}
   m_LocalScale: {x: 1.0214573, y: 1.0214573, z: 1.0214573}
   m_ConstrainProportionsScale: 0
   m_Children: []
