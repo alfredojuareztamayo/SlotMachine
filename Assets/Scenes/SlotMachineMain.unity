@@ -207,7 +207,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: abde2d6ccd4ed6e46b4f929af1f07c9e, type: 3}
   - {fileID: 21300000, guid: 4ae2e222de631e4449252d8e473e238d, type: 3}
   uniqueList: {fileID: 406671046}
-  radius: 6
+  radius: 5.7
   spritePrefab: {fileID: 6745116838158564852, guid: 6921f712d8622ea44aa97671c7026103, type: 3}
   angleOffset: 0
   speedRoller: 500
@@ -475,7 +475,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: ad3c7cdd573b6054e9a9566714a98fc6, type: 3}
   - {fileID: 21300000, guid: 9b38f0bf57ae7cc4f8c261acbbd25c8f, type: 3}
   uniqueList: {fileID: 406671046}
-  radius: 6.5
+  radius: 6
   spritePrefab: {fileID: 6745116838158564852, guid: 6921f712d8622ea44aa97671c7026103, type: 3}
   angleOffset: 0
   speedRoller: 500
@@ -1049,7 +1049,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 9b38f0bf57ae7cc4f8c261acbbd25c8f, type: 3}
   - {fileID: 21300000, guid: 4ae2e222de631e4449252d8e473e238d, type: 3}
   uniqueList: {fileID: 406671046}
-  radius: 6.5
+  radius: 6
   spritePrefab: {fileID: 6745116838158564852, guid: 6921f712d8622ea44aa97671c7026103, type: 3}
   angleOffset: 0
   speedRoller: 500
@@ -1118,7 +1118,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 31322f6481f4e974290e101b8ced65d1, type: 3}
   - {fileID: 21300000, guid: d3ffe63bec1b4d94589b3a6acd57aa3e, type: 3}
   uniqueList: {fileID: 406671046}
-  radius: 6
+  radius: 5.5
   spritePrefab: {fileID: 6745116838158564852, guid: 6921f712d8622ea44aa97671c7026103, type: 3}
   angleOffset: 0
   speedRoller: 500
@@ -1504,12 +1504,12 @@ MonoBehaviour:
   - {fileID: 109666540}
   delayBetweenReels: 0.5
   speedRoller: 350
+  useRandomSpeed: 1
   enableButton: {fileID: 1438059236}
+  patternManager: {fileID: 1100879181}
   state: 0
   symbolsActivesSpin: []
   GOActivesSpin: []
-  patternManager: {fileID: 1100879181}
-  useRandomSpeed: 0
 --- !u!4 &1636785025
 Transform:
   m_ObjectHideFlags: 0
