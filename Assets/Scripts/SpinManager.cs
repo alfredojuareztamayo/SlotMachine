@@ -75,8 +75,7 @@ public class SpinManager : MonoBehaviour
     {
         try
         {
-            if (Input.GetKeyDown(KeyCode.W))
-                ButtonSpin();
+           
 
             SwitchSlot();
 
